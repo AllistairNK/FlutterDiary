@@ -3,13 +3,13 @@ import 'package:hive/hive.dart';
 import 'package:testing/config.dart';
 import 'package:testing/hiveDB.dart';
 
-class AddNote extends StatelessWidget {
+class AddDiary extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Note"),
+        title: Text("New Diary Entry"),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -21,7 +21,7 @@ class AddNote extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Fill Note info",
+                    "Fill Diary info",
                     style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
                   ),
                   getDivider(),
@@ -36,21 +36,9 @@ class AddNote extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.all(5),
                           child: OutlinedButton(
-                            child: Text("Text Note"),
+                            child: Text("Text Diary"),
                             onPressed: () {
-                              createTextNote(context);
-                            },
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: EdgeInsets.all(5),
-                          child: OutlinedButton(
-                            child: Text("Check List Note"),
-                            onPressed: () {
-                              createCheckListNote(context);
+                              createTextDiary(context);
                             },
                           ),
                         ),
@@ -78,14 +66,14 @@ class AddNote extends StatelessWidget {
       controller: _titleController,
       validator: (value) {
         if (value == null) {
-          return "Please fill the Note title";
+          return "Please fill the title";
         }
         return null;
       },
       style: TextStyle(fontSize: 18),
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 12.0),
-          hintText: "Note title",
+          hintText: "Title",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
     );
   }
@@ -97,39 +85,27 @@ class AddNote extends StatelessWidget {
       style: TextStyle(fontSize: 18),
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 12.0),
-          hintText: "Note description (optional)",
+          hintText: "Description (optional)",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
     );
   }
 
-  createTextNote(BuildContext context) async {
+  createTextDiary(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      Box<Note> notes = Hive.box<Note>(notesBox);
-      reorderNotes(notes);
-      int pk = await notes.add(Note(DateTime.now(), _titleController.text,
-          _descriptionController.text, DateTime.now(), NoteType.Text, 0));
-      Box<TextNote> tNotes = Hive.box<TextNote>(textNotesBox);
-      await tNotes.add(TextNote("", pk));
+      Box<Diary> diaries = Hive.box<Diary>(diariesBox);
+      reorderDiaries(diaries);
+      int pk = await diaries.add(Diary(DateTime.now(), _titleController.text,
+          _descriptionController.text, DateTime.now(), DiaryType.Text, 0));
+      Box<TextDiary> tDiaries = Hive.box<TextDiary>(textDiariesBox);
+      await tDiaries.add(TextDiary("", pk));
       Navigator.of(context).pop();
     }
   }
 
-  createCheckListNote(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-      Box<Note> notes = Hive.box<Note>(notesBox);
-      reorderNotes(notes);
-      int pk = await notes.add(Note(DateTime.now(), _titleController.text,
-          _descriptionController.text, DateTime.now(), NoteType.CheckList, 0));
-      Box<CheckListNote> clNotes = Hive.box<CheckListNote>(checkListNotesBox);
-      await clNotes.add(CheckListNote("", false, 0, pk));
-      Navigator.of(context).pop();
-    }
-  }
-
-  reorderNotes(Box<Note> notes) {
-    for (Note noteOrder in notes.values) {
-      noteOrder.position = noteOrder.position + 1;
-      notes.put(noteOrder.key, noteOrder);
+  reorderDiaries(Box<Diary> diaries) {
+    for (Diary diaryOrder in diaries.values) {
+      diaryOrder.position = diaryOrder.position + 1;
+      diaries.put(diaryOrder.key, diaryOrder);
     }
   }
 }

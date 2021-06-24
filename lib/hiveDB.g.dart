@@ -6,30 +6,25 @@ part of 'hiveDB.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class NoteTypeAdapter extends TypeAdapter<NoteType> {
+class DiaryTypeAdapter extends TypeAdapter<DiaryType> {
   @override
   final int typeId = 1;
 
   @override
-  NoteType read(BinaryReader reader) {
+  DiaryType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return NoteType.Text;
-      case 1:
-        return NoteType.CheckList;
+        return DiaryType.Text;
       default:
-        return NoteType.Text;
+        return DiaryType.Text;
     }
   }
 
   @override
-  void write(BinaryWriter writer, NoteType obj) {
+  void write(BinaryWriter writer, DiaryType obj) {
     switch (obj) {
-      case NoteType.Text:
+      case DiaryType.Text:
         writer.writeByte(0);
-        break;
-      case NoteType.CheckList:
-        writer.writeByte(1);
         break;
     }
   }
@@ -40,33 +35,33 @@ class NoteTypeAdapter extends TypeAdapter<NoteType> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NoteTypeAdapter &&
+      other is DiaryTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
 
-class NoteAdapter extends TypeAdapter<Note> {
+class DiaryAdapter extends TypeAdapter<Diary> {
   @override
   final int typeId = 0;
 
   @override
-  Note read(BinaryReader reader) {
+  Diary read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Note(
+    return Diary(
       fields[0] as DateTime,
       fields[1] as String,
       fields[2] as String,
       fields[3] as DateTime,
-      fields[4] as NoteType,
+      fields[4] as DiaryType,
       fields[5] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Note obj) {
+  void write(BinaryWriter writer, Diary obj) {
     writer
       ..writeByte(6)
       ..writeByte(0)
@@ -78,7 +73,7 @@ class NoteAdapter extends TypeAdapter<Note> {
       ..writeByte(3)
       ..write(obj.dateUpdated)
       ..writeByte(4)
-      ..write(obj.noteType)
+      ..write(obj.diaryType)
       ..writeByte(5)
       ..write(obj.position);
   }
@@ -89,78 +84,35 @@ class NoteAdapter extends TypeAdapter<Note> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NoteAdapter &&
+      other is DiaryAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
 
-class CheckListNoteAdapter extends TypeAdapter<CheckListNote> {
+class TextDiaryAdapter extends TypeAdapter<TextDiary> {
   @override
   final int typeId = 2;
 
   @override
-  CheckListNote read(BinaryReader reader) {
+  TextDiary read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CheckListNote(
-      fields[0] as String,
-      fields[1] as bool,
-      fields[2] as int,
-      fields[3] as int,
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, CheckListNote obj) {
-    writer
-      ..writeByte(4)
-      ..writeByte(0)
-      ..write(obj.text)
-      ..writeByte(1)
-      ..write(obj.done)
-      ..writeByte(2)
-      ..write(obj.position)
-      ..writeByte(3)
-      ..write(obj.noteParent);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CheckListNoteAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class TextNoteAdapter extends TypeAdapter<TextNote> {
-  @override
-  final int typeId = 3;
-
-  @override
-  TextNote read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return TextNote(
+    return TextDiary(
       fields[0] as String,
       fields[1] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, TextNote obj) {
+  void write(BinaryWriter writer, TextDiary obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
       ..write(obj.text)
       ..writeByte(1)
-      ..write(obj.noteParent);
+      ..write(obj.diaryParent);
   }
 
   @override
@@ -169,7 +121,7 @@ class TextNoteAdapter extends TypeAdapter<TextNote> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TextNoteAdapter &&
+      other is TextDiaryAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

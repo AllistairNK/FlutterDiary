@@ -1,5 +1,4 @@
-final String appName = "Flutter Notes";
-final String notesBox = "FlutterNotesDB";
+final String appName = "Flutter Diaries";
+final String diariesBox = "FlutterDiariesDB";
 
-final String checkListNotesBox = "CheckListNotesItemsDB";
-final String textNotesBox = "TextNotesItemsDB";
+final String textDiariesBox = "TextDiariesItemsDB";
