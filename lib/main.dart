@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:testing/LoginForm.dart';
-import 'package:testing/add_note.dart';
+import 'package:testing/add_diary.dart';
 import 'package:testing/config.dart';
-import 'package:testing/edit_note.dart';
+import 'package:testing/edit_diary.dart';
 import 'package:testing/hiveDB.dart';
 import 'package:testing/widgets/nav-drawer.dart';
 
